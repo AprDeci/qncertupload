@@ -40,7 +40,7 @@ jobs:
           with:
             ak: ${{ secrets.QINIU_AK }}
             sk: ${{ secrets.QINIU_SK }}
-            domain: *.aprdec.top
+            domain: aprdec.top
             update-domains: |
               .${{ matrix.domain }} | https | http2
               ${{ matrix.domain }} | https | http2
