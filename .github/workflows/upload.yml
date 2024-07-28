@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
             ~/.acme.sh/acme.sh --issue --dns dns_tencent -d *.aprdec.top\
-            --key-file       /output/key.pem  \
+            --key-file /output/key.pem  \
             --fullchain-file /output/cert.pem 
 
       - name: update qiniu ${{ matrix.domain }}
