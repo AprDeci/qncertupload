@@ -13,6 +13,10 @@ jobs:
       domains: 
 
     steps:
+      - name: mkdir
+        # 创建output
+        run: mkdir -p output
+
       - name: install acme.sh
         shell: bash
         run: curl https://get.acme.sh | sh 
@@ -27,7 +31,7 @@ jobs:
       - name: Issue SSL certificates
         shell: bash
         run: |
-            ~/.acme.sh/acme.sh --issue --dns dns_tencent -d *.aprdec.top --key-file ./output/key.pem --fullchain-file ./output/cert.pem 
+            ~/.acme.sh/acme.sh --issue --dns dns_tencent -d *.aprdec.top --key-file output/key.pem --fullchain-file output/cert.pem 
 
       - name: update qiniu
         uses: foxundermoon/upload-qiniu-cert-action@master
@@ -39,7 +43,7 @@ jobs:
            .qncdn.aprdec.top| https | http2
            qiniu.aprdec.top | https | http2
           debug: 'yes'
-          cert-path: './output/cert.pem'
-          key-path: './output/key.pem'
+          cert-path: 'output/cert.pem'
+          key-path: 'output/key.pem'
         
 
