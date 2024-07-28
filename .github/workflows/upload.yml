@@ -1,4 +1,4 @@
-name: uploadcerttoqn
+name: upload
 on:
     workflow_dispatch:
     schedule:
