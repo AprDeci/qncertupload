@@ -9,11 +9,8 @@ jobs:
     name: Issue SSL certificate
     runs-on: ubuntu-latest
 
-    strategy:
-        matrix:
-          domain:
-              - qncdn.aprdec.top
-              - qiniu.aprdec.top
+    env:
+      domains: 
 
     steps:
       - name: install acme.sh
@@ -31,20 +28,20 @@ jobs:
         shell: bash
         run: |
             ~/.acme.sh/acme.sh --issue --dns dns_tencent -d *.aprdec.top\
-            --key-file /output/key.pem  \
-            --fullchain-file /output/cert.pem 
+            --key-file ./output/key.pem  \
+            --fullchain-file ./output/cert.pem 
 
-      - name: update qiniu ${{ matrix.domain }}
+      - name: update qiniu
         uses: foxundermoon/upload-qiniu-cert-action@master
         with:
           ak: ${{ secrets.QINIU_AK }}
           sk: ${{ secrets.QINIU_SK }}
           domain: aprdec.top
           update-domains: |
-           .${{ matrix.domain }} | https | http2
-           ${{ matrix.domain }} | https | http2
+           .qncdn.aprdec.top| https | http2
+           qiniu.aprdec.top | https | http2
           debug: 'yes'
-          cert-path: '/output/cert.pem'
-          key-path: '/output/key.pem'
+          cert-path: './output/cert.pem'
+          key-path: './output/key.pem'
         
 
