@@ -1,0 +1,51 @@
+name: uploadcerttoqn
+on:
+    workflow_dispatch:
+    schedule:
+      - cron: '0 0 1 * *'
+
+jobs:
+  issue-ssl-certificate:
+    name: Issue SSL certificate
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        domain:
+            - qncdn.aprdec.top
+            - qiniu.aprdec.top
+
+    steps:
+        - name: issue-ssl
+          uses: Menci/acme@v1
+          with:
+            version: 3.0.2
+
+            # Register your account and try issue a certificate with DNS API mode
+            # Then fill with the output of `tar cz ca account.conf | base64 -w0` running in your `~/.acme.sh`
+            account-tar: ${{ secrets.ACME_SH_ACCOUNT_TAR }}
+
+            domains: aprdec.top
+
+            append-wildcard: true
+
+            arguments: --dns dns_tencent -d *.aprdec.top
+
+            # 导出的证书路径
+            output-fullchain: output/fullchain.pem
+            output-key: output/private.key
+
+        - name: upload
+          uses: foxundermoon/upload-qiniu-cert-action@master
+          with:
+            ak: ${{ secrets.QINIU_AK }}
+            sk: ${{ secrets.QINIU_SK }}
+            domain: *.aprdec.top
+            update-domains: |
+              .${{ matrix.domain }} | https | http2
+              ${{ matrix.domain }} | https | http2
+            debug: 'yes'
+            cert-path: 'output/fullchain.pem'
+            key-path: 'output/private.key'
+            
+
