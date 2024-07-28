@@ -27,9 +27,7 @@ jobs:
       - name: Issue SSL certificates
         shell: bash
         run: |
-            ~/.acme.sh/acme.sh --issue --dns dns_tencent -d *.aprdec.top\
-            --key-file ./output/key.pem  \
-            --fullchain-file ./output/cert.pem 
+            ~/.acme.sh/acme.sh --issue --dns dns_tencent -d *.aprdec.top --key-file ./output/key.pem --fullchain-file ./output/cert.pem 
 
       - name: update qiniu
         uses: foxundermoon/upload-qiniu-cert-action@master
