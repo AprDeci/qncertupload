@@ -13,7 +13,6 @@ jobs:
       matrix:
         domain:
             - qncdn.aprdec.top
-            - qiniu.aprdec.top
 
     steps:
         - name: issue-ssl
